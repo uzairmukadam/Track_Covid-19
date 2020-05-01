@@ -94,7 +94,7 @@ public class DashboardActivity extends AppCompatActivity {
         try {
             for (int i = 0; i < array.length(); i++) {
                 JSONObject object = array.getJSONObject(i);
-                countryList[i]=object.getString("country");
+                countryList[i]=checkCountry(object.getString("country"));
                 countryFlag[i]=object.getJSONObject("countryInfo").getString("flag");
                 countryCases[i]=object.getInt("cases");
                 countryDeaths[i]=object.getInt("deaths");
@@ -103,6 +103,15 @@ public class DashboardActivity extends AppCompatActivity {
         }catch (Exception ignored){}
         calculateGlobal();
         setSpinner();
+    }
+
+    private String checkCountry(String country) {
+        if(country.toLowerCase().equals("usa")){
+            country="United States";
+        }else if(country.toLowerCase().equals("uk")){
+            country="United Kingdom";
+        }
+        return country;
     }
 
     private void calculateGlobal() {
@@ -124,13 +133,13 @@ public class DashboardActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter=new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, countryList){
             public View getView(int position, View view, ViewGroup parent){
                 View v = super.getView(position, view, parent);
-                ((TextView) v).setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                v.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 ((TextView) v).setTypeface(ResourcesCompat.getFont(getContext(), R.font.poppins_bold));
                 return v;
             }
             public View getDropDownView(int position, View view, ViewGroup parent){
                 View v = super.getView(position, view, parent);
-                ((TextView) v).setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                v.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 ((TextView) v).setTypeface(ResourcesCompat.getFont(getContext(), R.font.poppins_regular));
                 return v;
             }
