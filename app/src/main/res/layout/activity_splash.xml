@@ -20,7 +20,9 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_launcher_foreground" />
+            android:minHeight="200dp"
+            android:minWidth="200dp"
+            app:srcCompat="@drawable/logo" />
 
         <TextView
             android:layout_width="match_parent"
