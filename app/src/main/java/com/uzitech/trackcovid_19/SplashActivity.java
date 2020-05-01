@@ -10,6 +10,11 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 public class SplashActivity extends AppCompatActivity {
     
     DataHelper dataHelper;
@@ -24,12 +29,27 @@ public class SplashActivity extends AppCompatActivity {
         intent=new Intent(this, DashboardActivity.class);
         
         checkLocationPermission();
-        if(dataHelper.getGlobal()){
-            loadDashboard();
-        }else{
-            Toast.makeText(this, "Please connect to network!", Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        getGlobal();
+    }
+
+    private void getGlobal() {
+        final String url="https://corona.lmao.ninja/v2/countries";
+
+        StringRequest request=new StringRequest(0, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                dataHelper.saveData(response);
+                loadDashboard();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(SplashActivity.this, "Cannot connect to network", Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
+
+        Volley.newRequestQueue(this).add(request);
     }
 
     private void loadDashboard() {
