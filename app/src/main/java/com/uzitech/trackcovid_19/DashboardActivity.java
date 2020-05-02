@@ -17,8 +17,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -32,12 +35,13 @@ public class DashboardActivity extends AppCompatActivity {
 
     DataHelper dataHelper;
     Spinner countries;
-    TextView currCases, currDeaths, currRecovery;
-    ImageButton resetLocation;
+    TextView currCases, currDeaths, currRecovery, currNewCases, currNewDeaths, currActive;
+    ImageView flag;
+    ImageButton resetLocation, moreInfo;
     
     String curr_country;
     String[] countryList, countryFlag;
-    int[] countryCases, countryDeaths, countryRecovers;
+    int[] countryCases, countryDeaths, countryRecovers, newCases, newDeaths, countryActive;
     int globalCases, globalDeaths, globalRecovers;
 
     @Override
@@ -48,9 +52,14 @@ public class DashboardActivity extends AppCompatActivity {
         dataHelper=new DataHelper(this);
         countries=findViewById(R.id.country_list);
         currCases=findViewById(R.id.curr_cases);
+        currNewCases=findViewById(R.id.new_cases);
         currDeaths=findViewById(R.id.curr_deaths);
+        currNewDeaths=findViewById(R.id.new_deaths);
         currRecovery=findViewById(R.id.curr_recovers);
+        currActive=findViewById(R.id.curr_active);
+        flag=findViewById(R.id.flag);
         resetLocation=findViewById(R.id.curr_location);
+        moreInfo=findViewById(R.id.learn);
 
         curr_country=getCountry();
         getData(dataHelper.readData());
@@ -79,6 +88,10 @@ public class DashboardActivity extends AppCompatActivity {
         currCases.setText((NumberFormat.getNumberInstance(Locale.US).format(countryCases[position])));
         currDeaths.setText((NumberFormat.getNumberInstance(Locale.US).format(countryDeaths[position])));
         currRecovery.setText((NumberFormat.getNumberInstance(Locale.US).format(countryRecovers[position])));
+        currNewCases.setText("+"+(NumberFormat.getNumberInstance(Locale.US).format(newCases[position])));
+        currNewDeaths.setText("+"+(NumberFormat.getNumberInstance(Locale.US).format(newDeaths[position])));
+        currActive.setText("Active: "+(NumberFormat.getNumberInstance(Locale.US).format(countryActive[position])));
+        Glide.with(this).load(countryFlag[position]).into(flag);
     }
 
     private void getData(JSONArray array) {
@@ -91,6 +104,9 @@ public class DashboardActivity extends AppCompatActivity {
         countryCases=new int[array.length()];
         countryDeaths=new int[array.length()];
         countryRecovers=new int[array.length()];
+        newCases=new int[array.length()];
+        newDeaths=new int[array.length()];
+        countryActive=new int[array.length()];
         try {
             for (int i = 0; i < array.length(); i++) {
                 JSONObject object = array.getJSONObject(i);
@@ -99,6 +115,9 @@ public class DashboardActivity extends AppCompatActivity {
                 countryCases[i]=object.getInt("cases");
                 countryDeaths[i]=object.getInt("deaths");
                 countryRecovers[i]=object.getInt("recovered");
+                newCases[i]=object.getInt("todayCases");
+                newDeaths[i]=object.getInt("todayDeaths");
+                countryActive[i]=object.getInt("active");
             }
         }catch (Exception ignored){}
         calculateGlobal();
