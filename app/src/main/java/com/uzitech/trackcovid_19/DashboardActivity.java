@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.location.Address;
@@ -80,6 +81,13 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 countries.setSelection(getCurrIndex());
+            }
+        });
+
+        moreInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DashboardActivity.this, LearnActivity.class));
             }
         });
     }
