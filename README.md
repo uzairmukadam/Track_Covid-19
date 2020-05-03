@@ -14,9 +14,9 @@ This is a growing project with local data of different nations to be soon added.
 
 2)https://api.covid19india.org	(For India local data)
 
-##Adding Local Data Support for your Nation
+## Adding Local Data Support for your Nation
 
-###Changes in DataHelper.class
+Changes in DataHelper.class
 ----
 
 1)In getURL() function add data in the format:
