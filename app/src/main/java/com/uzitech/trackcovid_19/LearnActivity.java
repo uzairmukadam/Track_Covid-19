@@ -1,20 +1,23 @@
 package com.uzitech.trackcovid_19;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.FrameLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class LearnActivity extends AppCompatActivity {
 
     FrameLayout symptomsPage, carePage;
     boolean clickSym=false, clickCare=false;
     Button symp, care;
+
+    @Override
+    public void finish(){
+        super.finish();
+        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +55,7 @@ public class LearnActivity extends AppCompatActivity {
 
     void resetButton(){
         symp.setBackground(getDrawable(R.drawable.rounded_button));
-        care.setBackground(getDrawable(R.drawable.rounded_button_selected));
+        care.setBackground(getDrawable(R.drawable.rounded_button));
         symptomsPage.setVisibility(View.GONE);
         carePage.setVisibility(View.GONE);
     }

@@ -4,12 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -49,6 +43,68 @@ class DataHelper {
             }
             return new JSONArray(stringBuilder.toString());
         } catch (Exception e) {
+            return null;
+        }
+    }
+
+    String getURL(String country){
+        if(country.toLowerCase().equals("india")){
+            return "https://api.covid19india.org/data.json";
+        } else if(country.toLowerCase().equals("united states")) {
+            return "https://corona.lmao.ninja/v2/states";
+        }else {
+            return "";
+        }
+    }
+
+    JSONArray formatData(String response, String country){
+        if(country.toLowerCase().equals("india")){
+            return indiaObject(response);
+        }else if(country.toLowerCase().equals("united states")){
+            return usaObject(response);
+        }else{
+            return null;
+        }
+    }
+
+    private JSONArray usaObject(String response) {
+        try {
+            JSONArray array = new JSONArray();
+            JSONArray temp = new JSONArray(response);
+            for(int i=0; i<temp.length(); i++){
+                JSONObject tempObj=new JSONObject();
+                JSONObject object=temp.getJSONObject(i);
+                tempObj.put("state", object.getString("state"));
+                tempObj.put("cases", object.getInt("cases"));
+                tempObj.put("active", object.getInt("active"));
+                tempObj.put("deaths", object.getInt("deaths"));
+                array.put(tempObj);
+            }
+            return array;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    private JSONArray indiaObject(String response) {
+        try {
+            JSONObject obj=new JSONObject(response);
+            JSONArray array = new JSONArray();
+            JSONArray temp = obj.getJSONArray("statewise");
+            for(int i=0; i<temp.length(); i++){
+                JSONObject tempObj=new JSONObject();
+                JSONObject object=temp.getJSONObject(i);
+                if(!object.getString("state").equals("Total")) {
+                    tempObj.put("state", object.getString("state"));
+                    tempObj.put("confirm", object.getInt("confirmed"));
+                    tempObj.put("active", object.getInt("active"));
+                    tempObj.put("deaths", object.getInt("deaths"));
+                    tempObj.put("recoverd", object.getInt("recovered"));
+                    array.put(tempObj);
+                }
+            }
+            return array;
+        }catch (Exception e){
             return null;
         }
     }
