@@ -10,8 +10,9 @@ This is a growing project with local data of different nations to be soon added.
 
 **API**
 
-https://github.com/NovelCOVID/API	(For Global numbers and US local data)
-https://api.covid19india.org	(For India local data)
+1)https://github.com/NovelCOVID/API	(For Global numbers and US local data)
+
+2)https://api.covid19india.org	(For India local data)
 
 ##Adding Local Data Support for your Nation
 
